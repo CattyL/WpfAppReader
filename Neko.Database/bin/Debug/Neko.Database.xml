@@ -1,0 +1,418 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neko.Database</name>
+    </assembly>
+    <members>
+        <member name="T:Neko.Database.DbHelperBase">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Neko.Database.DbHelperBase.IsRunning">
+            <summary>
+            是否运行
+            </summary>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.Close">
+            <summary>
+            关闭连接
+            </summary>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.CommandTimeOut(System.Int32)">
+            <summary>
+            设置超时时间
+            </summary>
+            <param name="time">超时时间（单位：秒）</param>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.CreateCommand">
+            <summary>
+            创建SQL命令
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.CreateCommand(System.String)">
+            <summary>
+            创建SQL命令
+            </summary>
+            <param name="sql"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.CreateParameter(System.String,System.Object,System.Boolean)">
+            <summary>
+            创建参数(默认可为空)
+            </summary>
+            <param name="name">参数名</param>
+            <param name="value">参数值</param>
+            <param name="isNullable">是否可为空(默认可为空)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.CreateParameter(System.String,System.Object,System.Data.DbType,System.Boolean)">
+            <summary>
+            创建参数
+            </summary>
+            <param name="name">参数名</param>
+            <param name="value">参数值</param>
+            <param name="dbType">Specifies the data type of a field, a property, or a Parameter object of a .NET</param>
+            <param name="isNullable">默认可为空</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.Dispose">
+            <summary>
+            关闭连接释放资源
+            </summary>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.DropTable(System.String)">
+            <summary>
+            删除表
+            </summary>
+            <param name="tableName">表名</param>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.EscapeFromString(System.String)">
+            <summary>
+            转义字符
+            </summary>
+            <returns>转换后的字符</returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.ExecuteNonQuery(System.Data.Common.DbCommand)">
+            <summary>
+            执行SQL命令
+            </summary>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <returns>是否成功执行</returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.ExecuteNonQuery(System.Data.Common.DbTransaction,System.Data.Common.DbCommand)">
+            <summary>
+            执行Command
+            </summary>
+            <param name="tran">事务的基类</param>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <returns>是否成功执行</returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.ExecuteNonQuery(System.String)">
+            <summary>
+            执行SQL语句
+            </summary>
+            <param name="sql">SQL语句</param>
+            <returns>是否成功执行</returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.ExecuteNonQuery(System.Data.Common.DbTransaction,System.String)">
+            <summary>
+            执行SQL语句
+            </summary>
+            <param name="tran">事务的基类</param>
+            <param name="sql"></param>
+            <returns>是否成功执行</returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.ExecuteNonQuery(System.String,System.Collections.Generic.IEnumerable{System.Data.Common.DbParameter})">
+            <summary>
+            执行SQL语句
+            </summary>
+            <param name="sql">SQL语句</param>
+            <param name="lstParameters">参数列表</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.ExecuteReader(System.String,System.Func{System.Data.Common.DbDataReader,System.Boolean})">
+            <summary>
+            执行SQL语句
+            </summary>
+            <param name="sql">SQL语句</param>
+            <param name="fun">获取数据后的处理函数</param>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.ExecuteReader(System.Data.Common.DbTransaction,System.String,System.Func{System.Data.Common.DbDataReader,System.Boolean})">
+            <summary>
+            执行SQL语句获取数据
+            </summary>
+            <param name="tran">事务的基类</param>
+            <param name="sql">SQL语句</param>
+            <param name="fun">获取数据后的处理函数</param>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.ExecuteReader(System.Data.Common.DbCommand,System.Func{System.Data.Common.DbDataReader,System.Boolean})">
+            <summary>
+            执行Command获取数据
+            </summary>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <param name="fun">获取数据后的处理函数</param>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.ExecuteReader(System.Data.Common.DbTransaction,System.Data.Common.DbCommand,System.Func{System.Data.Common.DbDataReader,System.Boolean})">
+            <summary>
+            执行Command获取数据
+            </summary>
+            <param name="tran">事务的基类</param>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <param name="fun">获取数据后的处理函数</param>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.ExecuteScalar(System.String)">
+            <summary>
+            执行SQL语句获第一个取数据
+            </summary>
+            <param name="sql">SQL语句</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.ExecuteScalar(System.Data.Common.DbCommand)">
+            <summary>
+            执行Command获第一个取数据
+            </summary>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.ExecuteScalar(System.Data.Common.DbTransaction,System.Data.Common.DbCommand)">
+            <summary>
+            执行Command获第一个取数据
+            </summary>
+            <param name="tran">事务的基类</param>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.GetSqlString(System.Data.Common.DbCommand)">
+            <summary>
+            获取SQL命令中的sql语句
+            </summary>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.IsExistsTabele(System.String)">
+            <summary>
+             表是否存在
+            </summary>
+            <param name="tableName">表名</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.IsExistsTabele(System.Data.Common.DbTransaction,System.String)">
+            <summary>
+            表是否存在
+            </summary>
+            <param name="tran">事务</param>
+            <param name="tableName">表名</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.PagingSearch(System.String,System.Int32,System.Int32,System.Data.Common.DbTransaction)">
+            <summary>
+            分页取数据
+            </summary>
+            <param name="sql">sql语句</param>
+            <param name="pageSize">每页显示记录数</param>
+            <param name="pageIndex">当前页数从1开始</param>
+            <param name="tran">事务</param>
+            <returns>返回当前数据</returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.PagingSearch(System.String,System.String,System.Int32,System.Int32,System.Data.Common.DbTransaction)">
+            <summary>
+            分页取数据
+            </summary>
+            <param name="sql">sql语句</param>
+            <param name="orderby">sql server要单独指定排序字段</param>
+            <param name="pageSize">每页显示记录数</param>
+            <param name="pageIndex">当前页数从1开始</param>
+            <param name="tran">事务</param>
+            <returns>返回当前数据</returns>
+        </member>
+        <member name="M:Neko.Database.DbHelperBase.SqlBulkCopyByDatatable(System.Data.DataTable,System.String)">
+            <summary>
+            大批量插入数据（仅限SQLSERVER）
+            </summary>
+            <param name="dt">数据</param>
+            <param name="tableName">表名</param>
+        </member>
+        <member name="T:Neko.Database.IDbHelper">
+            <summary>
+            数据库操作接口
+            </summary>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.Close">
+            <summary>
+            关闭连接
+            </summary>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.CreateCommand">
+            <summary>
+            创建Command
+            </summary>
+            <returns>表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.CreateCommand(System.String)">
+            <summary>
+            创建Command
+            </summary>
+            <param name="sql">SQL语句</param>
+            <returns>表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.CreateParameter(System.String,System.Object,System.Boolean)">
+            <summary>
+            创建参数(默认可为空)
+            </summary>
+            <param name="name">参数名</param>
+            <param name="value">参数值</param>
+            <param name="isNullable">是否可为空(默认可为空)</param>
+            <returns>表示 System.Data.Common.DbCommand 的参数，还可以是它到 System.Data.DataSet 列的映射</returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.CreateParameter(System.String,System.Object,System.Data.DbType,System.Boolean)">
+            <summary>
+            创建参数
+            </summary>
+            <param name="name">参数名</param>
+            <param name="value">参数值</param>
+            <param name="dbType">Specifies the data type of a field, a property, or a Parameter object of a .NET</param>
+            <param name="isNullable">默认可为空</param>
+            <returns>表示 System.Data.Common.DbCommand 的参数，还可以是它到 System.Data.DataSet 列的映射</returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.ExecuteNonQuery(System.Data.Common.DbCommand)">
+            <summary>
+            执行SQL命令
+            </summary>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <returns>是否成功</returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.ExecuteNonQuery(System.Data.Common.DbTransaction,System.Data.Common.DbCommand)">
+            <summary>
+            执行Command
+            </summary>
+            <param name="tran">事务的基类</param>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.ExecuteNonQuery(System.String)">
+            <summary>
+            执行SQL语句
+            </summary>
+            <param name="sql">SQL语句</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.ExecuteNonQuery(System.Data.Common.DbTransaction,System.String)">
+            <summary>
+            执行SQL语句
+            </summary>
+            <param name="tran">事务的基类</param>
+            <param name="sql"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.ExecuteNonQuery(System.String,System.Collections.Generic.IEnumerable{System.Data.Common.DbParameter})">
+            <summary>
+            执行SQL语句
+            </summary>
+            <param name="sql">SQL语句</param>
+            <param name="lstParameters">参数列表</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.ExecuteReader(System.String,System.Func{System.Data.Common.DbDataReader,System.Boolean})">
+            <summary>
+            执行SQL语句
+            </summary>
+            <param name="sql">SQL语句</param>
+            <param name="fun">获取数据后的处理函数</param>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.ExecuteReader(System.Data.Common.DbTransaction,System.String,System.Func{System.Data.Common.DbDataReader,System.Boolean})">
+            <summary>
+            执行SQL语句获取数据
+            </summary>
+            <param name="tran">事务的基类</param>
+            <param name="sql">SQL语句</param>
+            <param name="fun">获取数据后的处理函数</param>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.ExecuteReader(System.Data.Common.DbCommand,System.Func{System.Data.Common.DbDataReader,System.Boolean})">
+            <summary>
+            执行Command获取数据
+            </summary>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <param name="fun">获取数据后的处理函数</param>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.ExecuteReader(System.Data.Common.DbTransaction,System.Data.Common.DbCommand,System.Func{System.Data.Common.DbDataReader,System.Boolean})">
+            <summary>
+            执行Command获取数据
+            </summary>
+            <param name="tran">事务的基类</param>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <param name="fun">获取数据后的处理函数</param>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.ExecuteScalar(System.String)">
+            <summary>
+            执行SQL语句获第一个取数据
+            </summary>
+            <param name="sql">SQL语句</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.ExecuteScalar(System.Data.Common.DbCommand)">
+            <summary>
+            执行Command获第一个取数据
+            </summary>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.ExecuteScalar(System.Data.Common.DbTransaction,System.Data.Common.DbCommand)">
+            <summary>
+            执行Command获第一个取数据
+            </summary>
+            <param name="tran">事务的基类</param>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.CommandTimeOut(System.Int32)">
+            <summary>
+            设置超时时间
+            </summary>
+            <param name="time">超时时间（单位：秒）</param>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.GetSqlString(System.Data.Common.DbCommand)">
+            <summary>
+            获取SQL命令中的sql语句
+            </summary>
+            <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.IsExistsTabele(System.String)">
+            <summary>
+             表是否存在
+            </summary>
+            <param name="tableName">表名</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.IsExistsTabele(System.Data.Common.DbTransaction,System.String)">
+            <summary>
+            表是否存在
+            </summary>
+            <param name="tran">事务</param>
+            <param name="tableName">表名</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.PagingSearch(System.String,System.Int32,System.Int32,System.Data.Common.DbTransaction)">
+            <summary>
+            分页取数据
+            </summary>
+            <param name="sql">sql语句</param>
+            <param name="pageSize">每页显示记录数</param>
+            <param name="pageIndex">当前页数从1开始</param>
+            <param name="tran">事务</param>
+            <returns>返回当前数据</returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.PagingSearch(System.String,System.String,System.Int32,System.Int32,System.Data.Common.DbTransaction)">
+            <summary>
+            分页取数据
+            </summary>
+            <param name="sql">sql语句</param>
+            <param name="orderby">sql server要单独指定排序字段</param>
+            <param name="pageSize">每页显示记录数</param>
+            <param name="pageIndex">当前页数从1开始</param>
+            <param name="tran">事务</param>
+            <returns>返回当前数据</returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.SqlBulkCopyByDatatable(System.Data.DataTable,System.String)">
+            <summary>
+            大批量插入数据（仅限SQLSERVER）
+            </summary>
+            <param name="dt">数据</param>
+            <param name="tableName">表名</param>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.EscapeFromString(System.String)">
+            <summary>
+            转义字符
+            </summary>
+            <returns>转换后的字符</returns>
+        </member>
+        <member name="M:Neko.Database.IDbHelper.DropTable(System.String)">
+            <summary>
+            删除表
+            </summary>
+            <param name="tableName">表名</param>
+        </member>
+    </members>
+</doc>

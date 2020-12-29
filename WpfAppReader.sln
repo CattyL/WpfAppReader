@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfAppReader", "WpfAppReader\WpfAppReader.csproj", "{083446D3-D799-4738-9852-480FAC04A7B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neko.Database", "Neko.Database\Neko.Database.csproj", "{37500212-3CFF-46DC-8910-075CE5D6FBFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{083446D3-D799-4738-9852-480FAC04A7B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{083446D3-D799-4738-9852-480FAC04A7B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{083446D3-D799-4738-9852-480FAC04A7B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{083446D3-D799-4738-9852-480FAC04A7B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37500212-3CFF-46DC-8910-075CE5D6FBFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37500212-3CFF-46DC-8910-075CE5D6FBFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37500212-3CFF-46DC-8910-075CE5D6FBFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37500212-3CFF-46DC-8910-075CE5D6FBFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {90EE97B2-CACE-4387-B579-B275AFED71E9}
+	EndGlobalSection
+EndGlobal
