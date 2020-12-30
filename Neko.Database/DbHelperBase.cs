@@ -23,9 +23,8 @@ namespace Neko.Database
         /// 命令超时时间
         /// </summary>
         protected int COMMAND_TIME_OUT = 30;
-        private object m_lockConnection;
         private bool isRunning;
-        private List<DbConnection> m_connections;
+        private List<IDbConnection> m_connections;
 
         /// <summary>
         /// 连接字符串
@@ -42,8 +41,7 @@ namespace Neko.Database
         public DbHelperBase()
         {
             isRunning = true;
-            m_connections = new List<DbConnection>();
-            m_lockConnection = new object();
+            m_connections = new List<IDbConnection>();
         }
 
         /// <summary>
@@ -76,7 +74,7 @@ namespace Neko.Database
         /// 创建SQL命令
         /// </summary>
         /// <returns></returns>
-        public virtual DbCommand CreateCommand()
+        public virtual IDbCommand CreateCommand()
         {
             throw new NotImplementedException();
         }
@@ -86,19 +84,18 @@ namespace Neko.Database
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public virtual DbCommand CreateCommand(string sql)
+        public virtual IDbCommand CreateCommand(string sql)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// 创建参数(默认可为空)
+        /// 创建参数
         /// </summary>
         /// <param name="name">参数名</param>
         /// <param name="value">参数值</param>
-        /// <param name="isNullable">是否可为空(默认可为空)</param>
         /// <returns></returns>
-        public virtual DbParameter CreateParameter(string name, object value, bool isNullable = true)
+        public virtual DbParameter CreateParameter(string name, object value)
         {
             throw new NotImplementedException();
         }
@@ -109,9 +106,8 @@ namespace Neko.Database
         /// <param name="name">参数名</param>
         /// <param name="value">参数值</param>
         /// <param name="dbType">Specifies the data type of a field, a property, or a Parameter object of a .NET</param>
-        /// <param name="isNullable">默认可为空</param>
         /// <returns></returns>
-        public virtual DbParameter CreateParameter(string name, object value, DbType dbType, bool isNullable = true)
+        public virtual DbParameter CreateParameter(string name, object value, DbType dbType)
         {
             throw new NotImplementedException();
         }
@@ -163,8 +159,8 @@ namespace Neko.Database
         /// 执行SQL命令
         /// </summary>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
-        /// <returns>是否成功执行</returns>
-        public virtual bool ExecuteNonQuery(DbCommand comm)
+        /// <returns>受影响的行数</returns>
+        public virtual int ExecuteNonQuery(IDbCommand comm)
         {
             throw new NotImplementedException();
         }
@@ -174,8 +170,8 @@ namespace Neko.Database
         /// </summary>
         /// <param name="tran">事务的基类</param>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
-        /// <returns>是否成功执行</returns>
-        public virtual bool ExecuteNonQuery(DbTransaction tran, DbCommand comm)
+        /// <returns>受影响的行数</returns>
+        public virtual int ExecuteNonQuery(IDbTransaction tran, IDbCommand comm)
         {
             throw new NotImplementedException();
         }
@@ -184,8 +180,8 @@ namespace Neko.Database
         /// 执行SQL语句
         /// </summary>
         /// <param name="sql">SQL语句</param>
-        /// <returns>是否成功执行</returns>
-        public virtual bool ExecuteNonQuery(string sql)
+        /// <returns>受影响的行数</returns>
+        public virtual int ExecuteNonQuery(string sql)
         {
             throw new NotImplementedException();
         }
@@ -195,8 +191,8 @@ namespace Neko.Database
         /// </summary>
         /// <param name="tran">事务的基类</param>
         /// <param name="sql"></param>
-        /// <returns>是否成功执行</returns>
-        public virtual bool ExecuteNonQuery(DbTransaction tran, string sql)
+        /// <returns>受影响的行数</returns>
+        public virtual int ExecuteNonQuery(IDbTransaction tran, string sql)
         {
             throw new NotImplementedException();
         }
@@ -206,8 +202,42 @@ namespace Neko.Database
         /// </summary>
         /// <param name="sql">SQL语句</param>
         /// <param name="lstParameters">参数列表</param>
-        /// <returns></returns>
-        public virtual bool ExecuteNonQuery(string sql, IEnumerable<DbParameter> lstParameters)
+        /// <returns>受影响的行数</returns>
+        public virtual int ExecuteNonQuery(string sql, IEnumerable<DbParameter> lstParameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 执行SQL语句
+        /// </summary>
+        /// <param name="sql">SQL语句</param>
+        /// <param name="tran">事务</param>
+        /// <param name="lstParameters">参数列表</param>
+        /// <returns>受影响的行数</returns>
+        public virtual int ExecuteNonQuery(string sql, IDbTransaction tran, IEnumerable<DbParameter> lstParameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 执行SQL语句
+        /// </summary>
+        /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+        /// <param name="lstParameters">参数列表</param>
+        /// <returns>受影响的行数</returns>
+        public virtual int ExecuteNonQuery(IDbCommand comm, IEnumerable<DbParameter> lstParameters)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// 执行SQL语句
+        /// </summary>
+        /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+        /// <param name="tran">事务</param>
+        /// <param name="lstParameters">参数列表</param>
+        /// <returns>受影响的行数</returns>
+        public virtual int ExecuteNonQuery(IDbCommand comm, IDbTransaction tran, IEnumerable<DbParameter> lstParameters)
         {
             throw new NotImplementedException();
         }
@@ -228,7 +258,7 @@ namespace Neko.Database
         /// <param name="tran">事务的基类</param>
         /// <param name="sql">SQL语句</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        public virtual void ExecuteReader(DbTransaction tran, string sql, Func<DbDataReader, bool> fun)
+        public virtual void ExecuteReader(IDbTransaction tran, string sql, Func<DbDataReader, bool> fun)
         {
             throw new NotImplementedException();
         }
@@ -238,7 +268,7 @@ namespace Neko.Database
         /// </summary>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        public virtual void ExecuteReader(DbCommand comm, Func<DbDataReader, bool> fun)
+        public virtual void ExecuteReader(IDbCommand comm, Func<DbDataReader, bool> fun)
         {
             throw new NotImplementedException();
         }
@@ -249,7 +279,7 @@ namespace Neko.Database
         /// <param name="tran">事务的基类</param>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        public virtual void ExecuteReader(DbTransaction tran, DbCommand comm, Func<DbDataReader, bool> fun)
+        public virtual void ExecuteReader(IDbTransaction tran, IDbCommand comm, Func<DbDataReader, bool> fun)
         {
             throw new NotImplementedException();
         }
@@ -269,7 +299,7 @@ namespace Neko.Database
         /// </summary>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
         /// <returns></returns>
-        public virtual object ExecuteScalar(DbCommand comm)
+        public virtual object ExecuteScalar(IDbCommand comm)
         {
             throw new NotImplementedException();
         }
@@ -280,7 +310,7 @@ namespace Neko.Database
         /// <param name="tran">事务的基类</param>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
         /// <returns></returns>
-        public virtual object ExecuteScalar(DbTransaction tran, DbCommand comm)
+        public virtual object ExecuteScalar(IDbTransaction tran, IDbCommand comm)
         {
             throw new NotImplementedException();
         }
@@ -290,7 +320,7 @@ namespace Neko.Database
         /// </summary>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
         /// <returns></returns>
-        public virtual string GetSqlString(DbCommand comm)
+        public virtual string GetSqlString(IDbCommand comm)
         {
             throw new NotImplementedException();
         }
@@ -309,7 +339,7 @@ namespace Neko.Database
         /// <param name="tran">事务</param>
         /// <param name="tableName">表名</param>
         /// <returns></returns>
-        public virtual bool IsExistsTabele(DbTransaction tran, string tableName)
+        public virtual bool IsExistsTabele(IDbTransaction tran, string tableName)
         {
             throw new NotImplementedException();
         }
@@ -321,7 +351,7 @@ namespace Neko.Database
         /// <param name="pageIndex">当前页数从1开始</param>
         /// <param name="tran">事务</param>
         /// <returns>返回当前数据</returns>
-        public virtual IList<Dictionary<string, object>> PagingSearch(string sql, int pageSize, int pageIndex, DbTransaction tran = null)
+        public virtual IList<Dictionary<string, object>> PagingSearch(string sql, int pageSize, int pageIndex, IDbTransaction tran = null)
         {
             throw new NotImplementedException();
         }
@@ -334,7 +364,7 @@ namespace Neko.Database
         /// <param name="pageIndex">当前页数从1开始</param>
         /// <param name="tran">事务</param>
         /// <returns>返回当前数据</returns>
-        public virtual IList<Dictionary<string, object>> PagingSearch(string sql, string orderby, int pageSize, int pageIndex, DbTransaction tran = null)
+        public virtual IList<Dictionary<string, object>> PagingSearch(string sql, string orderby, int pageSize, int pageIndex, IDbTransaction tran = null)
         {
             throw new NotImplementedException();
         }
@@ -347,5 +377,7 @@ namespace Neko.Database
         {
             throw new NotImplementedException();
         }
+
+
     }
 }
