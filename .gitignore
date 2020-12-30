@@ -3,3 +3,14 @@
 *.cache
 /Neko.Database/obj/Debug/Neko.Database.csproj.FileListAbsolute.txt
 /WpfAppReader/obj/Debug/WpfAppReader_MarkupCompile.i.lref
+/WpfAppReader/obj/Debug/WpfAppReader.g.resources
+/WpfAppReader/obj/Debug/WpfAppReader.Properties.Resources.resources
+/WpfAppReader/obj/Debug/WpfAppReader_MarkupCompile.lref
+/WpfAppReader/obj/Debug/App.g.cs
+/WpfAppReader/obj/Debug/MainWindow.g.cs
+/WpfAppReader/bin/Debug
+/WpfAppReader/obj/Debug
+bin
+obj
+/WpfAppReader/bin/Debug/WpfAppReader.exe.config
+/WpfAppReader/bin/Debug/WpfAppReader.exe
