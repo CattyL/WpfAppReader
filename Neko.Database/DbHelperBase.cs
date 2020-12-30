@@ -10,18 +10,41 @@ using System.Threading.Tasks;
 namespace Neko.Database
 {
     /// <summary>
-    /// 
+    /// 数据库操作类基类
     /// </summary>
     public class DbHelperBase : IDbHelper
     {
         private int CONNECTION_MANAGER_THREAD_SLEEP_TIME_SPAN = 100;
-        private int CONNECTION_TIME_OUT = 3000;
-        private int COMMAND_TIME_OUT = 30;
-        private Thread m_connectionManagerThread;
+        /// <summary>
+        /// 连接超时时间
+        /// </summary>
+        protected int CONNECTION_TIME_OUT = 3000;
+        /// <summary>
+        /// 命令超时时间
+        /// </summary>
+        protected int COMMAND_TIME_OUT = 30;
         private object m_lockConnection;
         private bool isRunning;
         private List<DbConnection> m_connections;
 
+        /// <summary>
+        /// 连接字符串
+        /// </summary>
+        protected string connectionstring = "";
+        /// <summary>
+        /// 数据库类型
+        /// </summary>
+        protected eDatabaseType databasetype;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public DbHelperBase()
+        {
+            isRunning = true;
+            m_connections = new List<DbConnection>();
+            m_lockConnection = new object();
+        }
 
         /// <summary>
         /// 是否运行
@@ -133,7 +156,7 @@ namespace Neko.Database
         /// <returns>转换后的字符</returns>
         public string EscapeFromString(string value)
         {
-            throw new NotImplementedException();
+            return value;
         }
 
         /// <summary>
