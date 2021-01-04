@@ -145,6 +145,13 @@ namespace Neko.Database
         /// <returns></returns>
         object ExecuteScalar(IDbTransaction tran, IDbCommand comm);
         /// <summary>
+        /// 执行Command获第一个取数据
+        /// </summary>
+        /// <param name="tran">事务的基类</param>
+        /// <param name="sql">SQL语句</param>
+        /// <returns></returns>
+        object ExecuteScalar(IDbTransaction tran, string sql);
+        /// <summary>
         /// 设置超时时间
         /// </summary>
         /// <param name="time">超时时间（单位：秒）</param>

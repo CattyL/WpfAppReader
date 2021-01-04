@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
@@ -65,7 +66,7 @@ namespace Neko.Database
         /// 设置超时时间
         /// </summary>
         /// <param name="time">超时时间（单位：秒）</param>
-        public virtual void CommandTimeOut(int time)
+        public void CommandTimeOut(int time)
         {
             COMMAND_TIME_OUT = time;
         }
@@ -150,7 +151,7 @@ namespace Neko.Database
         /// 转义字符
         /// </summary>
         /// <returns>转换后的字符</returns>
-        public string EscapeFromString(string value)
+        public virtual string EscapeFromString(string value)
         {
             return value;
         }
@@ -316,14 +317,39 @@ namespace Neko.Database
         }
 
         /// <summary>
+        /// 执行Command获第一个取数据
+        /// </summary>
+        /// <param name="tran">事务的基类</param>
+        /// <param name="sql">SQL语句</param>
+        /// <returns></returns>
+        public virtual object ExecuteScalar(IDbTransaction tran, string sql)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// 获取SQL命令中的sql语句
         /// </summary>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
         /// <returns></returns>
         public virtual string GetSqlString(IDbCommand comm)
         {
+            return comm.CommandText;
+        }
+
+        /// <summary>
+        /// 获取分页查询语句
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="orderby"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <returns></returns>
+        internal virtual string GetPagingSearchSql(string sql, string orderby, int pageSize, int pageIndex)
+        {
             throw new NotImplementedException();
         }
+
         /// <summary>
         ///  表是否存在
         /// </summary>
@@ -353,7 +379,7 @@ namespace Neko.Database
         /// <returns>返回当前数据</returns>
         public virtual IList<Dictionary<string, object>> PagingSearch(string sql, int pageSize, int pageIndex, IDbTransaction tran = null)
         {
-            throw new NotImplementedException();
+            return PagingSearch(sql, string.Empty, pageSize, pageIndex, tran);
         }
         /// <summary>
         /// 分页取数据
@@ -366,7 +392,23 @@ namespace Neko.Database
         /// <returns>返回当前数据</returns>
         public virtual IList<Dictionary<string, object>> PagingSearch(string sql, string orderby, int pageSize, int pageIndex, IDbTransaction tran = null)
         {
-            throw new NotImplementedException();
+            IList<Dictionary<string, object>> list = new ObservableCollection<Dictionary<string, object>>();
+            var strsql = GetPagingSearchSql(sql, orderby, pageSize, pageIndex);
+            Func<IDataReader, bool> fun = (dataReader) =>
+            {
+                Dictionary<string, object> record = new Dictionary<string, object>();
+                for (int i = 0; i < dataReader.FieldCount; i++)
+                {
+                    record.Add(dataReader.GetName(i), dataReader[i]);
+                }
+                list.Add(record);
+                return true;
+            };
+            if (tran == null)
+                ExecuteReader(strsql, fun);
+            else
+                ExecuteReader(tran, strsql, fun);
+            return list;
         }
         /// <summary>
         /// 大批量插入数据（仅限SQLSERVER）
@@ -378,6 +420,6 @@ namespace Neko.Database
             throw new NotImplementedException();
         }
 
-
+        
     }
 }

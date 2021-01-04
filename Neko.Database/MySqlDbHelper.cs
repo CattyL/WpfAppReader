@@ -107,6 +107,18 @@ namespace Neko.Database
         }
 
         /// <summary>
+        /// 转义字符
+        /// </summary>
+        /// <returns>转换后的字符</returns>
+        public override string EscapeFromString(string value)
+        {
+            StringBuilder stringBuilder = new StringBuilder(value);
+            stringBuilder.Insert(0, "`");
+            stringBuilder.Append("`");
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
         /// 执行SQL命令
         /// </summary>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
@@ -419,5 +431,160 @@ namespace Neko.Database
             ExecuteReader(comm, fun);
         }
 
+        /// <summary>
+        /// 执行Command获第一个取数据
+        /// </summary>
+        /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+        /// <returns></returns>
+        public override object ExecuteScalar(IDbCommand comm)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionstring))
+            {
+                conn.Open();
+                try
+                {
+                    comm.Connection = conn;
+                    comm.CommandTimeout = COMMAND_TIME_OUT;
+                    return comm.ExecuteScalar();
+                }
+                catch
+                {
+                    throw;
+                }
+                finally
+                {
+                    if (comm != null)
+                        comm.Dispose();
+                    conn.Close();
+                    conn.Dispose();
+                }
+            }
+            
+        }
+
+        /// <summary>
+        /// 执行Command获第一个取数据
+        /// </summary>
+        /// <param name="tran">事务的基类</param>
+        /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+        /// <returns></returns>
+        public override object ExecuteScalar(IDbTransaction tran, IDbCommand comm)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionstring))
+            {
+                conn.Open();
+                if (tran == null)
+                    tran = conn.BeginTransaction();
+                using (tran)
+                {
+                    try
+                    {
+                        comm.Connection = conn;
+                        comm.CommandTimeout = COMMAND_TIME_OUT;
+                        comm.Transaction = tran;
+                        return comm.ExecuteScalar();
+                    }
+                    catch
+                    {
+                        tran.Rollback();
+                        throw;
+                    }
+                    finally
+                    {
+                        if (comm != null)
+                            comm.Dispose();
+                        conn.Close();
+                        conn.Dispose();
+                    }
+                }
+                
+            }
+        }
+
+        /// <summary>
+        /// 执行SQL语句获第一个取数据
+        /// </summary>
+        /// <param name="sql">SQL语句</param>
+        /// <returns></returns>
+        public override object ExecuteScalar(string sql)
+        {
+            MySqlCommand comm = new MySqlCommand(sql);
+            return ExecuteScalar(comm);
+        }
+
+        /// <summary>
+        /// 执行Command获第一个取数据
+        /// </summary>
+        /// <param name="tran">事务的基类</param>
+        /// <param name="sql">SQL语句</param>
+        /// <returns></returns>
+        public override object ExecuteScalar(IDbTransaction tran, string sql)
+        {
+            MySqlCommand comm = new MySqlCommand(sql);
+            return ExecuteScalar(tran, comm);
+        }
+
+        /// <summary>
+        /// 分页取数据
+        /// </summary>
+        /// <param name="sql">sql语句</param>
+        /// <param name="orderby">sql server要单独指定排序字段</param>
+        /// <param name="pageSize">每页显示记录数</param>
+        /// <param name="pageIndex">当前页数从1开始</param>
+        /// <returns>返回sql语句</returns>
+        internal override string GetPagingSearchSql(string sql, string orderby, int pageSize, int pageIndex)
+        {
+            int startindex = pageSize * (pageIndex - 1);
+
+            string sqlstr = string.Format("{0} limit {1} ,{2}", sql, startindex, pageSize);
+            return sqlstr;
+        }
+
+        /// <summary>
+        /// 获取SQL命令中的sql语句
+        /// </summary>
+        /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
+        /// <returns></returns>
+        public override string GetSqlString(IDbCommand comm)
+        {
+            return base.GetSqlString(comm);
+        }
+
+        /// <summary>
+        /// 表是否存在
+        /// </summary>
+        /// <param name="tran">事务</param>
+        /// <param name="tableName">表名</param>
+        /// <returns></returns>
+        public override bool IsExistsTabele(IDbTransaction tran, string tableName)
+        {
+            string str = $"SHOW TABLES LIKE '{tableName}'";
+
+            bool isexists = false;
+            ExecuteReader(tran, str, (r) =>
+            {
+                isexists = true;
+                return false;
+            });
+            return isexists;
+        }
+
+        /// <summary>
+        ///  表是否存在
+        /// </summary>
+        /// <param name="tableName">表名</param>
+        /// <returns></returns>
+        public override bool IsExistsTabele(string tableName)
+        {
+            string str = $"SHOW TABLES LIKE '{tableName}'";
+
+            bool isexists = false;
+            ExecuteReader(str, (r) =>
+            {
+                isexists = true;
+                return false;
+            });
+            return isexists;
+        }
     }
 }
