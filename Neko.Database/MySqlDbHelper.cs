@@ -113,9 +113,29 @@ namespace Neko.Database
         /// <returns>是否成功执行</returns>
         public override int ExecuteNonQuery(IDbCommand comm)
         {
-            MySqlConnection mySqlConnection = new MySqlConnection(connectionstring);
-            MySqlTransaction mySqlTransaction = mySqlConnection.BeginTransaction();
-            return ExecuteNonQuery(mySqlTransaction, comm);
+            using (MySqlConnection mySqlConnection = new MySqlConnection(connectionstring))
+            {
+                mySqlConnection.Open();
+                try
+                {
+#if DEBUG
+                    Console.WriteLine(comm.CommandText);
+#endif
+                    comm.CommandTimeout = COMMAND_TIME_OUT;
+                    comm.Connection = mySqlConnection;
+                    return comm.ExecuteNonQuery();
+                }
+                catch
+                {
+                    if (comm != null)
+                        comm.Dispose();
+                    throw;
+                }
+                finally
+                {
+                    mySqlConnection.Close();
+                }
+            }
         }
 
         /// <summary>
@@ -181,9 +201,8 @@ namespace Neko.Database
         /// <returns>受影响的行数</returns>
         public override int ExecuteNonQuery(string sql, IEnumerable<DbParameter> lstParameters)
         {
-            MySqlConnection mySqlConnection = new MySqlConnection(connectionstring);
-            MySqlTransaction mySqlTransaction = mySqlConnection.BeginTransaction();
-            return ExecuteNonQuery(sql, mySqlTransaction, lstParameters);
+            MySqlCommand comm = new MySqlCommand(sql);
+            return ExecuteNonQuery(comm, lstParameters);
         }
 
         /// <summary>
@@ -251,9 +270,39 @@ namespace Neko.Database
         /// <returns>受影响的行数</returns>
         public override int ExecuteNonQuery(IDbCommand comm, IEnumerable<DbParameter> lstParameters)
         {
-            MySqlConnection mySqlConnection = new MySqlConnection(connectionstring);
-            MySqlTransaction mySqlTransaction = mySqlConnection.BeginTransaction();
-            return ExecuteNonQuery(comm, mySqlTransaction, lstParameters);
+            using (MySqlConnection mySqlConnection = new MySqlConnection(connectionstring))
+            {
+
+                mySqlConnection.Open();
+                try
+                {
+#if DEBUG
+                    Console.WriteLine(comm.CommandText);
+#endif
+                    comm.CommandTimeout = COMMAND_TIME_OUT;
+                    comm.Connection = mySqlConnection;
+                    if (lstParameters != null)
+                        foreach (var item in lstParameters)
+                        {
+                            comm.Parameters.Add(item);
+#if DEBUG
+                            Console.WriteLine("item.ParameterName:" + item.ParameterName + " " + "item.Value:" + item.Value);
+#endif
+                        }
+                    return comm.ExecuteNonQuery();
+                }
+                catch
+                {
+                    if (comm != null)
+                        comm.Dispose();
+                    throw;
+                }
+                finally
+                {
+                    mySqlConnection.Close();
+                }
+
+            }
         }
 
         /// <summary>
@@ -261,9 +310,44 @@ namespace Neko.Database
         /// </summary>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        public override void ExecuteReader(IDbCommand comm, Func<DbDataReader, bool> fun)
+        public override void ExecuteReader(IDbCommand comm, Func<IDataReader, bool> fun)
         {
-            base.ExecuteReader(comm, fun);
+            using (MySqlConnection conn = new MySqlConnection(connectionstring))
+            {
+                conn.Open();
+
+                comm.Connection = conn;
+                comm.CommandTimeout = COMMAND_TIME_OUT;
+                try
+                {
+#if DEBUG
+                    System.Console.WriteLine(comm.CommandText);
+#endif
+                    using (var reader = comm.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (fun != null)
+                            {
+                                if (!fun(reader))
+                                    break;
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+                finally
+                {
+                    if (comm != null)
+                        comm.Dispose();
+                    conn.Close();
+                    conn.Dispose();
+                }
+            }
+                
         }
 
         /// <summary>
@@ -272,9 +356,44 @@ namespace Neko.Database
         /// <param name="tran">事务的基类</param>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        public override void ExecuteReader(IDbTransaction tran, IDbCommand comm, Func<DbDataReader, bool> fun)
+        public override void ExecuteReader(IDbTransaction tran, IDbCommand comm, Func<IDataReader, bool> fun)
         {
-            base.ExecuteReader(tran, comm, fun);
+            using (MySqlConnection conn = (MySqlConnection)tran.Connection)
+            {
+                conn.Open();
+                try
+                {
+#if DEBUG
+                    Console.WriteLine(comm.CommandText);
+#endif
+                    comm.Transaction = tran;
+                    comm.CommandTimeout = COMMAND_TIME_OUT;
+                    using (var reader = comm.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (fun != null)
+                            {
+                                if (!fun(reader))
+                                    break;
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    tran.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    if (comm != null)
+                        comm.Dispose();
+                    conn.Close();
+                    conn.Dispose();
+                }
+            }
+
         }
 
         /// <summary>
@@ -283,9 +402,10 @@ namespace Neko.Database
         /// <param name="tran">事务的基类</param>
         /// <param name="sql">SQL语句</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        public override void ExecuteReader(IDbTransaction tran, string sql, Func<DbDataReader, bool> fun)
+        public override void ExecuteReader(IDbTransaction tran, string sql, Func<IDataReader, bool> fun)
         {
-            base.ExecuteReader(tran, sql, fun);
+            MySqlCommand comm = new MySqlCommand(sql);
+            ExecuteReader(tran, comm, fun);
         }
 
         /// <summary>
@@ -293,42 +413,10 @@ namespace Neko.Database
         /// </summary>
         /// <param name="sql">SQL语句</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        public override void ExecuteReader(string sql, Func<DbDataReader, bool> fun)
+        public override void ExecuteReader(string sql, Func<IDataReader, bool> fun)
         {
-            MySqlConnection conn = new MySqlConnection(connectionstring);
-            conn.Open();
-            MySqlCommand comm = new MySqlCommand();
-            comm.Connection = conn;
-            comm.CommandText = sql;
-            comm.CommandTimeout = COMMAND_TIME_OUT;
-            try
-            {
-#if DEBUG
-                System.Console.WriteLine(comm.CommandText);
-#endif
-                using (var reader = comm.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        if (fun != null)
-                        {
-                            if (!fun(reader))
-                                break;
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                throw;
-            }
-            finally
-            {
-                if (comm != null)
-                    comm.Dispose();
-                conn.Close();
-                conn.Dispose();
-            }
+            MySqlCommand comm = new MySqlCommand(sql);
+            ExecuteReader(comm, fun);
         }
 
     }

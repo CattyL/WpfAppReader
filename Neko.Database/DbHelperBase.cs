@@ -247,7 +247,7 @@ namespace Neko.Database
         /// </summary>
         /// <param name="sql">SQL语句</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        public virtual void ExecuteReader(string sql, Func<DbDataReader, bool> fun)
+        public virtual void ExecuteReader(string sql, Func<IDataReader, bool> fun)
         {
             throw new NotImplementedException();
         }
@@ -258,7 +258,7 @@ namespace Neko.Database
         /// <param name="tran">事务的基类</param>
         /// <param name="sql">SQL语句</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        public virtual void ExecuteReader(IDbTransaction tran, string sql, Func<DbDataReader, bool> fun)
+        public virtual void ExecuteReader(IDbTransaction tran, string sql, Func<IDataReader, bool> fun)
         {
             throw new NotImplementedException();
         }
@@ -268,7 +268,7 @@ namespace Neko.Database
         /// </summary>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        public virtual void ExecuteReader(IDbCommand comm, Func<DbDataReader, bool> fun)
+        public virtual void ExecuteReader(IDbCommand comm, Func<IDataReader, bool> fun)
         {
             throw new NotImplementedException();
         }
@@ -279,7 +279,7 @@ namespace Neko.Database
         /// <param name="tran">事务的基类</param>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        public virtual void ExecuteReader(IDbTransaction tran, IDbCommand comm, Func<DbDataReader, bool> fun)
+        public virtual void ExecuteReader(IDbTransaction tran, IDbCommand comm, Func<IDataReader, bool> fun)
         {
             throw new NotImplementedException();
         }
