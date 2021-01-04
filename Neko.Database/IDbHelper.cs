@@ -104,27 +104,27 @@ namespace Neko.Database
         /// </summary>
         /// <param name="sql">SQL语句</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        void ExecuteReader(string sql, Func<DbDataReader, bool> fun);
+        void ExecuteReader(string sql, Func<IDataReader, bool> fun);
         /// <summary>
         /// 执行SQL语句获取数据
         /// </summary>
         /// <param name="tran">事务的基类</param>
         /// <param name="sql">SQL语句</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        void ExecuteReader(IDbTransaction tran, string sql, Func<DbDataReader, bool> fun);
+        void ExecuteReader(IDbTransaction tran, string sql, Func<IDataReader, bool> fun);
         /// <summary>
         /// 执行Command获取数据
         /// </summary>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        void ExecuteReader(IDbCommand comm, Func<DbDataReader, bool> fun);
+        void ExecuteReader(IDbCommand comm, Func<IDataReader, bool> fun);
         /// <summary>
         /// 执行Command获取数据
         /// </summary>
         /// <param name="tran">事务的基类</param>
         /// <param name="comm">表示要对数据源执行的 SQL 语句或存储过程。 提供表示命令的数据库特定类的基类</param>
         /// <param name="fun">获取数据后的处理函数</param>
-        void ExecuteReader(IDbTransaction tran, IDbCommand comm, Func<DbDataReader, bool> fun);
+        void ExecuteReader(IDbTransaction tran, IDbCommand comm, Func<IDataReader, bool> fun);
         /// <summary>
         /// 执行SQL语句获第一个取数据
         /// </summary>
